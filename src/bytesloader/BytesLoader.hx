@@ -3,32 +3,32 @@ package bytesloader;
 import haxe.io.Bytes;
 
 #if openfl
-import openfl.events.Event;
-import openfl.events.HTTPStatusEvent;
-import openfl.events.ErrorEvent;
-import openfl.events.AsyncErrorEvent;
-import openfl.events.SecurityErrorEvent;
-import openfl.events.IOErrorEvent;
-import openfl.net.URLLoader;
-import openfl.net.URLLoaderDataFormat;
-import openfl.net.URLRequest;
-import openfl.utils.ByteArray;
+  import openfl.events.Event;
+  import openfl.events.HTTPStatusEvent;
+  import openfl.events.ErrorEvent;
+  import openfl.events.AsyncErrorEvent;
+  import openfl.events.SecurityErrorEvent;
+  import openfl.events.IOErrorEvent;
+  import openfl.net.URLLoader;
+  import openfl.net.URLLoaderDataFormat;
+  import openfl.net.URLRequest;
+  import openfl.utils.ByteArray;
 #elseif flash
-import flash.events.Event;
-import flash.events.ProgressEvent;
-import flash.events.HTTPStatusEvent;
-import flash.events.ErrorEvent;
-import flash.events.AsyncErrorEvent;
-import flash.events.SecurityErrorEvent;
-import flash.events.IOErrorEvent;
-import flash.net.URLLoader;
-import flash.net.URLLoaderDataFormat;
-import flash.net.URLRequest;
-import flash.utils.ByteArray;
+  import flash.events.Event;
+  import flash.events.ProgressEvent;
+  import flash.events.HTTPStatusEvent;
+  import flash.events.ErrorEvent;
+  import flash.events.AsyncErrorEvent;
+  import flash.events.SecurityErrorEvent;
+  import flash.events.IOErrorEvent;
+  import flash.net.URLLoader;
+  import flash.net.URLLoaderDataFormat;
+  import flash.net.URLRequest;
+  import flash.utils.ByteArray;
 #elseif js
-import js.html.Event;
-import js.html.ProgressEvent;
-import js.html.XMLHttpRequest;
+  import js.html.Event;
+  import js.html.ProgressEvent;
+  import js.html.XMLHttpRequest;
 #end
 
 // Callbacks arguments
@@ -107,7 +107,7 @@ class BytesLoader
     {
       loader.load(new URLRequest(this.url));
     }
-    catch(e:Dynamic)
+    catch (e:Dynamic)
     {
       if (this.errorHandler != null) this.errorHandler(e.toString());
       _clean();
@@ -172,7 +172,7 @@ class BytesLoader
     clean();
   }
   #elseif js
-	private var request:XMLHttpRequest;
+  private var request:XMLHttpRequest;
   private function _load()
   {
     // TODO: Clean this up a bit using constants for GET, etc...
@@ -180,40 +180,56 @@ class BytesLoader
     request.addEventListener("progress", _progressHandler, false);
     request.onreadystatechange = function(event)
     {
-			if (request.readyState != 4) return;
-			
-			if (request.status != null && request.status >= 200 && request.status <= 400)
+      if (request.readyState != 4) return;
+
+      if (request.status != null && request.status >= 200 && request.status <= 400)
       {
-				var bytes;
-				
-				if (request.responseType == NONE)
+        var bytes;
+
+        if (request.responseType == NONE)
         {
-					bytes = Bytes.ofString(request.responseText);
-				}
+          bytes = Bytes.ofString(request.responseText);
+        }
         else
         {
-					bytes = Bytes.ofData(request.response);
-				}
-				
+          bytes = Bytes.ofData(request.response);
+        }
+
         if (this.completeHandler != null) this.completeHandler(bytes);
-			}
+      }
       else
       {
-				if (this.errorHandler != null) this.errorHandler("Error: " + request.status);
-			}
-			
-      request.removeEventListener("progress", _progressHandler);
-      request.onreadystatechange = null;
-			request = null;
+        if (this.errorHandler != null) this.errorHandler("Error: " + request.status);
+      }
 
-      clean();
-		};
+      _clean();
+    };
 
-    request.open("GET", this.url, true);
+    // Load URL
+    try
+    {
+      request.open("GET", this.url, true);
+    }
+    catch (e:Dynamic)
+    {
+      if (this.errorHandler != null) this.errorHandler("Error: " + e.toString());
+      _clean();
+      return;
+    }
+
     request.responseType = ARRAYBUFFER;
     request.send(this.url);
   }
-  private function _progressHandler(event) {
+  private function _clean()
+  {
+    request.removeEventListener("progress", _progressHandler);
+    request.onreadystatechange = null;
+    request = null;
+
+    clean();
+  }
+  private function _progressHandler(event)
+  {
     if ( request != null )
     {
       var percent:Float = event.loaded / event.total;
@@ -225,7 +241,7 @@ class BytesLoader
   #else
   private function _load()
   {
-    trace("Not yet supported...");
+    trace("Not yet supported on this platform...");
 
     if (this.completeHandler != null) this.completeHandler(null);
 
@@ -243,7 +259,8 @@ class BytesLoader
   }
 
   // Shortcut function
-  public static inline function load(url:String, callbacks:Callbacks) {
+  public static inline function load(url:String, callbacks:Callbacks)
+  {
     return new BytesLoader(url, callbacks);
   }
 }
