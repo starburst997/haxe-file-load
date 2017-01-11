@@ -4,6 +4,7 @@ import haxe.io.Bytes;
 
 #if openfl
   import openfl.events.Event;
+  import openfl.events.ProgressEvent;
   import openfl.events.HTTPStatusEvent;
   import openfl.events.ErrorEvent;
   import openfl.events.AsyncErrorEvent;
@@ -128,11 +129,11 @@ class BytesLoader
 
     _clean();
   }
-  private function _progressHandler(e:Event)
+  private function _progressHandler(e:ProgressEvent)
   {
     if ( loader != null )
     {
-      var percent:Float = loader.bytesLoaded / loader.bytesTotal;
+      var percent:Float = (e.bytesTotal == 0) ? 0 : (e.bytesLoaded / e.bytesTotal);
       this.progress = percent;
 
       if (this.progressHandler != null) this.progressHandler(percent);
@@ -232,7 +233,7 @@ class BytesLoader
   {
     if ( request != null )
     {
-      var percent:Float = event.loaded / event.total;
+      var percent:Float = (event.total == 0) ? 0 : (event.loaded / event.total);
       this.progress = percent;
 
       if (this.progressHandler != null) this.progressHandler(percent);
