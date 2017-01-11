@@ -1,0 +1,11 @@
+{
+	"name" : "haxe-bytes-loader",
+	"url" : "https://github.com/starburst997/haxe-bytes-loader",
+	"license" : "",
+  "description" : "Simple Bytes Loader in Haxe with minimal dependency supporting JS / Flash / OpenFL.",
+  "version" : "0.0.1",
+  "classPath": "src/",
+	"releasenote" : "",
+	"contributors" : ["starburst997"],
+	"dependencies" : {}
+}
