@@ -5,7 +5,8 @@ import bytesloader.BytesLoader;
 // Tests
 enum Tests
 {
-  LoadURL1;
+  LoadURL_Local;
+  LoadURL_LocalBad;
 }
 
 /**
@@ -20,6 +21,7 @@ class LoadFile
   // List of files
   public static inline var PATH:String = "./notes/";
   public static inline var TEST1:String = PATH + "test1.note";
+  public static inline var TEST2:String = PATH + "test1.notezz";
 
   // Keep current loader
   var loader:BytesLoader = null;
@@ -29,11 +31,12 @@ class LoadFile
   {
     trace("Load File Launch");
 
-    var test = LoadURL1;
+    var test = LoadURL_Local;
 
     switch (test)
     {
-      case LoadURL1: loadURL( TEST1 );
+      case LoadURL_Local: loadURL( TEST1 );
+      case LoadURL_LocalBad: loadURL( TEST2 );
     }
   }
 

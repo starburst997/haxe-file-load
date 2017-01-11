@@ -158,13 +158,13 @@ class BytesLoader
   {
     if ( loader != null )
     {
-      loader.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
-      loader.removeEventListener(Event.COMPLETE, completeHandler);
-      loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, statusHandler);
-      loader.removeEventListener(ErrorEvent.ERROR, errorHandler);
-      loader.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, errorHandler);
-      loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
-      loader.removeEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+      loader.removeEventListener(ProgressEvent.PROGRESS, _progressHandler);
+      loader.removeEventListener(Event.COMPLETE, _completeHandler);
+      loader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, _statusHandler);
+      loader.removeEventListener(ErrorEvent.ERROR, _errorHandler);
+      loader.removeEventListener(AsyncErrorEvent.ASYNC_ERROR, _errorHandler);
+      loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, _errorHandler);
+      loader.removeEventListener(IOErrorEvent.IO_ERROR, _errorHandler);
 
       loader = null;
     }
