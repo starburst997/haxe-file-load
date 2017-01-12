@@ -14,7 +14,7 @@ This was primarily created for [notessimo-player](https://github.com/starburst99
 Tested on JS / SWF and OpenFL
 
 Example
-```
+```haxe
 var urls = ["xxxxx", "yyyyy", "zzzzz"];
 var files = new Array<BytesLoaderParams>();
 
