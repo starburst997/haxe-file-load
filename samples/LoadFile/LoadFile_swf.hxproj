@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="swf\LoadFile.swf" />
+    <movie path="Server\LoadFile.swf" />
     <movie fps="60" />
     <movie width="800" />
     <movie height="600" />
@@ -15,7 +15,7 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
-    <class path="." />
+    <class path="Source" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -50,7 +50,7 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Default" />
-    <option testMovieCommand="swf\LoadFile.swf" />
+    <option testMovieCommand="Server\LoadFile.swf" />
   </options>
   <!-- Plugin storage -->
   <storage />

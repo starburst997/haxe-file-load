@@ -1,7 +1,6 @@
 package;
 
-import bytesloader.Loaders;
-import haxe.io.Bytes;
+import multiloader.Loaders;
 
 // Tests
 enum Tests

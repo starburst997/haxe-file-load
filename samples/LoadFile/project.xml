@@ -2,12 +2,12 @@
 <project>
 
 	<meta title="OpenFL" package="com.sample.openfl" version="1.0.0" company="Company Name" />
-	<app main="Main" path="Export" file="OpenFL" />
+	<app main="OpenFL" path="Export" file="OpenFL" />
 
 	<source path="Source" />
 
 	<haxelib name="openfl" />
-	<haxelib name="haxe-bytes-loader" />
+	<haxelib name="haxe-multiloader" />
 
 	<assets path="Assets" rename="assets" />
 

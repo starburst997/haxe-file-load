@@ -1,4 +1,4 @@
-package multiloaders;
+package multiloader;
 
 import haxe.io.Bytes;
 import haxe.Json;
