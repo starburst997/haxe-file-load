@@ -12,3 +12,54 @@ JS stuff is mainly ripped from [lime](https://github.com/openfl/lime/).
 This was primarily created for [notessimo-player](https://github.com/starburst997/notessimo-player) as a way to distribute a small standalone JS file but also to be used as a haxe library in OpenFL project.
 
 Tested on JS / SWF and OpenFL
+
+Example
+```
+var urls = ["xxxxx", "yyyyy", "zzzzz"];
+var files = new Array<BytesLoaderParams>();
+
+var n = 0;
+for ( url in urls )
+{
+  // Single file events
+  var i = n++;
+  files.push(
+  {
+    url: url,
+    complete: function(data)
+    {
+      // Complete is always called, even on errors
+      var hasData = data != null;
+      trace("TEST", i, "Has Bytes", hasData);
+
+      if ( hasData )
+      {
+        trace("TEST", i, "Bytes:", data.length, data);
+      }
+    }, progress: function(percent)
+    {
+      trace("TEST", i, "Progress:", percent);
+    }, error: function(error)
+    {
+      trace("TEST", i, "Error:", error);
+    }
+  });
+}
+
+// Load all files
+MultiLoader.multiBytes(files,
+{
+  complete: function(hasError)
+  {
+    trace("Final Complete:", hasError);
+
+    bytesLoaders = null;
+  }, progress: function(percent)
+  {
+    trace("Final Progress:", percent);
+  }, error: function(error)
+  {
+    trace("Final Error:", error);
+  }
+});
+```
