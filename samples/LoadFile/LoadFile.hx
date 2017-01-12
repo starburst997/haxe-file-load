@@ -14,6 +14,10 @@ enum Tests
   LoadJsonURL_Local2;
   LoadJsonURL_LocalBad;
   LoadBytesLoaders_1;
+  LoadBytesLoaders_2;
+  LoadBytesLoaders_Bad;
+  LoadStringLoaders_1;
+  LoadJsonLoaders_1;
 }
 
 /**
@@ -35,13 +39,15 @@ class LoadFile
 
   // Test loaders
   var bytesLoaders:BytesLoaders = null;
+  var stringLoaders:StringLoaders = null;
+  var jsonLoaders:JsonLoaders = null;
 
   // Run some tests
   public function new()
   {
     trace("Load File Launch!");
 
-    var test = LoadBytesLoaders_1;
+    var test = LoadJsonLoaders_1;
 
     switch (test)
     {
@@ -52,62 +58,47 @@ class LoadFile
       case LoadJsonURL_Local: loadJsonURL( TEST3 );
       case LoadJsonURL_Local2: loadJsonURL( TEST1 );
       case LoadJsonURL_LocalBad: loadJsonURL( TEST4 );
-      case LoadBytesLoaders_1: loadBytesLoaders();
+      case LoadBytesLoaders_1: loadBytesLoaders( [TEST1, TEST3] );
+      case LoadBytesLoaders_2: loadBytesLoaders( [TEST1, TEST3, TEST1, TEST3, TEST1, TEST3] );
+      case LoadBytesLoaders_Bad: loadBytesLoaders( [TEST1, TEST3, TEST1, TEST2, TEST1, TEST3] );
+      case LoadStringLoaders_1: loadStringLoaders( [TEST3, TEST3] );
+      case LoadJsonLoaders_1: loadJsonLoaders( [TEST3, TEST3] );
     }
   }
 
   // Bytes Loaders Test
-  function loadBytesLoaders()
+  function loadBytesLoaders( urls:Array<String> )
   {
     bytesLoaders = new BytesLoaders();
 
     var files = new Array<BytesLoaderParams>();
 
-    // Load Test 1
-    files.push(
+    var n = 0;
+    for ( url in urls )
     {
-      url: TEST1,
-      complete: function(data)
+      var i = n++;
+      files.push(
       {
-        // Complete is always called, even on errors
-        var hasData = data != null;
-        trace("TEST1", "Has Bytes", hasData);
-
-        if ( hasData )
+        url: url,
+        complete: function(data)
         {
-          trace("TEST1", "Bytes:", data.length, data);
-        }
-      }, progress: function(percent)
-      {
-        trace("TEST1", "Progress:", percent);
-      }, error: function(error)
-      {
-        trace("TEST1", "Error:", error);
-      }
-    });
+          // Complete is always called, even on errors
+          var hasData = data != null;
+          trace("TEST", i, "Has Bytes", hasData);
 
-    // Load Test 3
-    files.push(
-    {
-      url: TEST3,
-      complete: function(data)
-      {
-        // Complete is always called, even on errors
-        var hasData = data != null;
-        trace("TEST3", "Has Bytes", hasData);
-
-        if ( hasData )
+          if ( hasData )
+          {
+            trace("TEST", i, "Bytes:", data.length, data);
+          }
+        }, progress: function(percent)
         {
-          trace("TEST3", "Bytes:", data.length, data);
+          trace("TEST", i, "Progress:", percent);
+        }, error: function(error)
+        {
+          trace("TEST", i, "Error:", error);
         }
-      }, progress: function(percent)
-      {
-        trace("TEST3", "Progress:", percent);
-      }, error: function(error)
-      {
-        trace("TEST3", "Error:", error);
-      }
-    });
+      });
+    }
 
     // Load all files
     bytesLoaders.load(files,
@@ -117,6 +108,110 @@ class LoadFile
         trace("Final Complete:", hasError);
 
         bytesLoaders = null;
+      }, progress: function(percent)
+      {
+        trace("Final Progress:", percent);
+      }, error: function(error)
+      {
+        trace("Final Error:", error);
+      }
+    });
+  }
+
+  // String Loaders Test
+  function loadStringLoaders( urls:Array<String> )
+  {
+    stringLoaders = new StringLoaders();
+
+    var files = new Array<StringLoaderParams>();
+
+    var n = 0;
+    for ( url in urls )
+    {
+      var i = n++;
+      files.push(
+      {
+        url: url,
+        complete: function(data)
+        {
+          // Complete is always called, even on errors
+          var hasData = data != null;
+          trace("TEST", i, "Has String", hasData);
+
+          if ( hasData )
+          {
+            trace("TEST", i, "String:", data.length, data);
+          }
+        }, progress: function(percent)
+        {
+          trace("TEST", i, "Progress:", percent);
+        }, error: function(error)
+        {
+          trace("TEST", i, "Error:", error);
+        }
+      });
+    }
+
+    // Load all files
+    stringLoaders.load(files,
+    {
+      complete: function(hasError)
+      {
+        trace("Final Complete:", hasError);
+
+        stringLoaders = null;
+      }, progress: function(percent)
+      {
+        trace("Final Progress:", percent);
+      }, error: function(error)
+      {
+        trace("Final Error:", error);
+      }
+    });
+  }
+
+  // Json Loaders Test
+  function loadJsonLoaders( urls:Array<String> )
+  {
+    jsonLoaders = new JsonLoaders();
+
+    var files = new Array<JsonLoaderParams>();
+
+    var n = 0;
+    for ( url in urls )
+    {
+      var i = n++;
+      files.push(
+      {
+        url: url,
+        complete: function(data)
+        {
+          // Complete is always called, even on errors
+          var hasData = data != null;
+          trace("TEST", i, "Has Json", hasData);
+
+          if ( hasData )
+          {
+            trace("TEST", i, "Json:", data.name, data);
+          }
+        }, progress: function(percent)
+        {
+          trace("TEST", i, "Progress:", percent);
+        }, error: function(error)
+        {
+          trace("TEST", i, "Error:", error);
+        }
+      });
+    }
+
+    // Load all files
+    jsonLoaders.load(files,
+    {
+      complete: function(hasError)
+      {
+        trace("Final Complete:", hasError);
+
+        jsonLoaders = null;
       }, progress: function(percent)
       {
         trace("Final Progress:", percent);

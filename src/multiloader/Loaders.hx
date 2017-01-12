@@ -1,4 +1,4 @@
-package bytesloader;
+package multiloaders;
 
 import haxe.io.Bytes;
 import haxe.Json;
@@ -230,7 +230,7 @@ private class Loader<T>
   // Cancel request
   public function cancel()
   {
-    trace("Not implemented...");
+    // TODO: Implement cancel...
   }
 
   #if (openfl || flash)

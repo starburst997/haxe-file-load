@@ -1,4 +1,4 @@
--lib haxe-bytes-loader
+-lib multiloader
 -cp .
 -js html5/js/LoadFile.js
 -main Main

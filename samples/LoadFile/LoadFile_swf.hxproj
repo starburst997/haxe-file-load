@@ -28,7 +28,7 @@
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="haxe-bytes-loader" />
+    <library name="multiloader" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

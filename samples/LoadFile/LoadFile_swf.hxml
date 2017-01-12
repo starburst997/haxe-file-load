@@ -1,4 +1,4 @@
--lib haxe-bytes-loader
+-lib multiloader
 -cp .
 -swf swf/LoadFile.swf
 -swf-header 800:600:60:FFFFFF
