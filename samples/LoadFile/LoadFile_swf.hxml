@@ -3,4 +3,4 @@
 -swf swf/LoadFile.swf
 -swf-header 800:600:60:FFFFFF
 -swf-version 15.0
--main LoadFile
+-main Main

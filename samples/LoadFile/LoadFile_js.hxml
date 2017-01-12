@@ -1,5 +1,5 @@
 -lib haxe-bytes-loader
 -cp .
 -js html5/js/LoadFile.js
--main LoadFile
+-main Main
 

@@ -1,7 +1,7 @@
 package;
 
+import bytesloader.Loaders;
 import haxe.io.Bytes;
-import bytesloader.Loader;
 
 // Tests
 enum Tests
@@ -13,14 +13,11 @@ enum Tests
   LoadJsonURL_Local;
   LoadJsonURL_Local2;
   LoadJsonURL_LocalBad;
+  LoadBytesLoaders_1;
 }
 
 /**
  * Class used to Test / Compile haxe-bytes-loader library
- *
- * Install https://github.com/tapio/live-server and start from html5 folder
- * Simply issue "live-server" inside the html5 folder and build (release for faster build)
- * Server will reload page automatically when JS is compiled
  */
 class LoadFile
 {
@@ -36,12 +33,15 @@ class LoadFile
   var jsonLoader:JsonLoader = null;
   var stringLoader:StringLoader = null;
 
+  // Test loaders
+  var bytesLoaders:BytesLoaders = null;
+
   // Run some tests
   public function new()
   {
     trace("Load File Launch!");
 
-    var test = LoadBytesURL_Local;
+    var test = LoadBytesLoaders_1;
 
     switch (test)
     {
@@ -52,7 +52,79 @@ class LoadFile
       case LoadJsonURL_Local: loadJsonURL( TEST3 );
       case LoadJsonURL_Local2: loadJsonURL( TEST1 );
       case LoadJsonURL_LocalBad: loadJsonURL( TEST4 );
+      case LoadBytesLoaders_1: loadBytesLoaders();
     }
+  }
+
+  // Bytes Loaders Test
+  function loadBytesLoaders()
+  {
+    bytesLoaders = new BytesLoaders();
+
+    var files = new Array<BytesLoaderParams>();
+
+    // Load Test 1
+    files.push(
+    {
+      url: TEST1,
+      complete: function(data)
+      {
+        // Complete is always called, even on errors
+        var hasData = data != null;
+        trace("TEST1", "Has Bytes", hasData);
+
+        if ( hasData )
+        {
+          trace("TEST1", "Bytes:", data.length, data);
+        }
+      }, progress: function(percent)
+      {
+        trace("TEST1", "Progress:", percent);
+      }, error: function(error)
+      {
+        trace("TEST1", "Error:", error);
+      }
+    });
+
+    // Load Test 3
+    files.push(
+    {
+      url: TEST3,
+      complete: function(data)
+      {
+        // Complete is always called, even on errors
+        var hasData = data != null;
+        trace("TEST3", "Has Bytes", hasData);
+
+        if ( hasData )
+        {
+          trace("TEST3", "Bytes:", data.length, data);
+        }
+      }, progress: function(percent)
+      {
+        trace("TEST3", "Progress:", percent);
+      }, error: function(error)
+      {
+        trace("TEST3", "Error:", error);
+      }
+    });
+
+    // Load all files
+    bytesLoaders.load(files,
+    {
+      complete: function(hasError)
+      {
+        trace("Final Complete:", hasError);
+
+        bytesLoaders = null;
+      }, progress: function(percent)
+      {
+        trace("Final Progress:", percent);
+      }, error: function(error)
+      {
+        trace("Final Error:", error);
+      }
+    });
   }
 
   // Simply load a String URL and do nothing else
@@ -140,11 +212,5 @@ class LoadFile
         trace("Error", error);
       }
     });
-  }
-
-  // Entry point
-  static function main()
-  {
-    new LoadFile();
   }
 }
