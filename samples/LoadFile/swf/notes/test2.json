@@ -1,0 +1,20 @@
+{
+  "name": "notessimo-web",
+  "dependencies": {
+    "@mars/heroku-nextjs-build": "^1.0.1",
+    "next": "^1.2.3"
+  },
+  "scripts": {
+    "dev": "next -p 3001",
+    "deploy": "git push heroku master",
+    "build": "next build",
+    "start": "next start -p $PORT",
+    "postinstall": "heroku-nextjs-build"
+  },
+  "engines": {
+    "node": "6.9.1"
+  },
+  "cacheDirectories": [
+    "nextjs/node_modules"
+  ]
+}

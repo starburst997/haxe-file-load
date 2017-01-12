@@ -1,6 +1,7 @@
 package bytesloader;
 
 import haxe.io.Bytes;
+import haxe.Json;
 
 #if openfl
   import openfl.events.Event;
@@ -32,18 +33,25 @@ import haxe.io.Bytes;
   import js.html.XMLHttpRequest;
 #end
 
+// Use those public types
+typedef BytesLoader = Loader<Bytes>;
+typedef StringLoader = Loader<String>;
+typedef JsonLoader = Loader<Dynamic>;
+
 // Callbacks arguments
-private typedef Callbacks =
+@:generic
+private typedef Callbacks<T> =
 {
-  @:optional var complete:Bytes->Void;
+  @:optional var complete:T->Void;
   @:optional var progress:Float->Void;
   @:optional var error:String->Void;
 }
 
 /**
- * Bytes loader
+ * Generic loader
  */
-class BytesLoader
+@:generic
+private class Loader<T>
 {
   // Progress
   public var progress:Float = 0.0;
@@ -51,19 +59,31 @@ class BytesLoader
   // Keep url
   var url:String;
 
+  // Return a string instead
+  var isText:Bool = false;
+
+  // Return a JSON instead
+  var isJson:Bool = false;
+
   // Callbacks
-  var completeHandler:Bytes->Void;
+  var completeHandler:T->Void;
   var errorHandler:String->Void;
   var progressHandler:Float->Void;
 
   // Create new loader
-  public function new(url:String, callbacks:Callbacks)
+  public function new(url:String, callbacks:Callbacks<T>)
   {
+    isText = !Std.is(this, BytesLoader);
+    if ( isText )
+    {
+      isJson = Std.is(this, JsonLoader);
+    }
+
     init(url, callbacks);
   }
 
   // Init
-  public function init(url:String, callbacks:Callbacks)
+  public function init(url:String, callbacks:Callbacks<T>)
   {
     trace("BytesLoader:", url);
 
@@ -89,7 +109,7 @@ class BytesLoader
   {
     // OpenFL / Flash are the same, just different imports
     loader = new URLLoader();
-    loader.dataFormat = URLLoaderDataFormat.BINARY;
+    loader.dataFormat = isText ? URLLoaderDataFormat.TEXT : URLLoaderDataFormat.BINARY;
 
     loader.addEventListener(ProgressEvent.PROGRESS, _progressHandler, false, 0, true);
     loader.addEventListener(Event.COMPLETE, _completeHandler, false, 0, true);
@@ -143,10 +163,32 @@ class BytesLoader
   {
     if ( loader != null )
     {
-      var data:ByteArray = loader.data;
-      var bytes = Bytes.ofData(data);
+      var value:T;
 
-      if (this.completeHandler != null) this.completeHandler(bytes);
+      if ( isJson )
+      {
+        try
+        {
+          value = cast(Json.parse(loader.data));
+        }
+        catch (e:Dynamic)
+        {
+          if (this.errorHandler != null) this.errorHandler("Error: " + e.toString());
+          _clean();
+          return;
+        }
+      }
+      else if ( isText )
+      {
+        value = cast(loader.data);
+      }
+      else
+      {
+        var data:ByteArray = loader.data;
+        value = cast(Bytes.ofData(data));
+      }
+
+      if (this.completeHandler != null) this.completeHandler(value);
     }
     else
     {
@@ -185,18 +227,52 @@ class BytesLoader
 
       if (request.status != null && request.status >= 200 && request.status <= 400)
       {
-        var bytes;
+        var value:T;
 
-        if (request.responseType == NONE)
+        if ( isJson )
         {
-          bytes = Bytes.ofString(request.responseText);
+          try
+          {
+            if (request.responseType == NONE)
+            {
+              value = cast(Json.parse(request.responseText));
+            }
+            else
+            {
+              value = cast(Json.parse(request.response));
+            }
+          }
+          catch (e:Dynamic)
+          {
+            if (this.errorHandler != null) this.errorHandler("Error: " + e.toString());
+            _clean();
+            return;
+          }
+        }
+        else if ( isText )
+        {
+          if (request.responseType == NONE)
+          {
+            value = cast(request.responseText);
+          }
+          else
+          {
+            value = cast(request.response);
+          }
         }
         else
         {
-          bytes = Bytes.ofData(request.response);
+          if (request.responseType == NONE)
+          {
+            value = cast(Bytes.ofString(request.responseText));
+          }
+          else
+          {
+            value = cast(Bytes.ofData(request.response));
+          }
         }
 
-        if (this.completeHandler != null) this.completeHandler(bytes);
+        if (this.completeHandler != null) this.completeHandler(value);
       }
       else
       {
@@ -218,7 +294,8 @@ class BytesLoader
       return;
     }
 
-    request.responseType = ARRAYBUFFER;
+    if ( !isText ) request.responseType = ARRAYBUFFER;
+
     request.send(this.url);
   }
   private function _clean()
@@ -257,11 +334,5 @@ class BytesLoader
     this.completeHandler = null;
     this.errorHandler = null;
     this.progressHandler = null;
-  }
-
-  // Shortcut function
-  public static inline function load(url:String, callbacks:Callbacks)
-  {
-    return new BytesLoader(url, callbacks);
   }
 }
