@@ -1,6 +1,7 @@
 package;
 
 import multiloader.Loaders;
+import multiloader.MultiLoader;
 
 // Tests
 enum Tests
@@ -17,6 +18,7 @@ enum Tests
   LoadBytesLoaders_Bad;
   LoadStringLoaders_1;
   LoadJsonLoaders_1;
+  MultiBytes_1;
 }
 
 /**
@@ -25,7 +27,7 @@ enum Tests
 class LoadFile
 {
   // List of files
-  public static inline var PATH:String = "./notes/";
+  public static inline var PATH:String = "./assets/notes/";
   public static inline var TEST1:String = PATH + "test1.note";
   public static inline var TEST2:String = PATH + "test1.notezz";
   public static inline var TEST3:String = PATH + "test2.json";
@@ -46,7 +48,7 @@ class LoadFile
   {
     trace("Load File Launch!");
 
-    var test = LoadJsonLoaders_1;
+    var test = MultiBytes_1;
 
     switch (test)
     {
@@ -62,7 +64,59 @@ class LoadFile
       case LoadBytesLoaders_Bad: loadBytesLoaders( [TEST1, TEST3, TEST1, TEST2, TEST1, TEST3] );
       case LoadStringLoaders_1: loadStringLoaders( [TEST3, TEST3] );
       case LoadJsonLoaders_1: loadJsonLoaders( [TEST3, TEST3] );
+      case MultiBytes_1: multiBytes( [TEST1, TEST3] );
     }
+  }
+
+  // Bytes Loaders Test
+  function multiBytes( urls:Array<String> )
+  {
+    trace("Multi Loaders");
+    var files = new Array<BytesLoaderParams>();
+
+    var n = 0;
+    for ( url in urls )
+    {
+      var i = n++;
+      files.push(
+      {
+        url: url,
+        complete: function(data)
+        {
+          // Complete is always called, even on errors
+          var hasData = data != null;
+          trace("TEST", i, "Has Bytes", hasData);
+
+          if ( hasData )
+          {
+            trace("TEST", i, "Bytes:", data.length, data);
+          }
+        }, progress: function(percent)
+        {
+          trace("TEST", i, "Progress:", percent);
+        }, error: function(error)
+        {
+          trace("TEST", i, "Error:", error);
+        }
+      });
+    }
+
+    // Load all files
+    MultiLoader.multiBytes(files,
+    {
+      complete: function(hasError)
+      {
+        trace("Final Complete:", hasError);
+
+        bytesLoaders = null;
+      }, progress: function(percent)
+      {
+        trace("Final Progress:", percent);
+      }, error: function(error)
+      {
+        trace("Final Error:", error);
+      }
+    });
   }
 
   // Bytes Loaders Test

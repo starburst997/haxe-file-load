@@ -54,7 +54,7 @@ private typedef Callbacks<T> =
   @:optional var error:String->Void;
 }
 
-private typedef FinalCallbacks =
+typedef LoadersCallbacks =
 {
   @:optional var complete:Bool->Void;
   @:optional var progress:Float->Void;
@@ -83,7 +83,7 @@ private class Loaders<T>
   }
 
   // Load multiple loader, keep track of progress and final callback
-  public function load( callbacks:Array<CallbacksWithURL<T>>, callback:FinalCallbacks = null )
+  public function load( callbacks:Array<CallbacksWithURL<T>>, callback:LoadersCallbacks = null )
   {
     var _loaders = new Array<Loader<T>>();
     var counter = callbacks.length;
