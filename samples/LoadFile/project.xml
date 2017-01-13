@@ -11,4 +11,6 @@
 
 	<assets path="Assets" rename="assets" />
 
+  <haxeflag name="--times" value="" />
+
 </project>

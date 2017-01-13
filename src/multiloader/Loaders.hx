@@ -129,7 +129,7 @@ private class Loaders<T>
 
             if ( !done && (completed >= counter) )
             {
-              if ( callback.complete != null )
+              if ( (callback != null) && (callback.complete != null) )
               {
                 callback.complete(false);
                 _clean();
@@ -140,7 +140,7 @@ private class Loaders<T>
         {
           // Handle progress events
           if ( progress != null ) progress(_percent);
-          if ( callback.progress != null )
+          if ( (callback != null) && (callback.progress != null) )
           {
             var percent = 0.0;
             for ( _loader in _loaders ) percent += _loader.progress;
@@ -156,14 +156,14 @@ private class Loaders<T>
             done = true;
 
             // Call complete with error
-            if ( callback.complete != null ) callback.complete(true);
+            if ( (callback != null) && (callback.complete != null) ) callback.complete(true);
 
             // Clean what's left
             _clean();
           }
 
           if ( error != null ) error(_error);
-          if ( callback.error != null ) callback.error(_error);
+          if ( (callback != null) && (callback.error != null) ) callback.error(_error);
         }
       });
 
