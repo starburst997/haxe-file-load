@@ -3,9 +3,9 @@ package;
 import openfl.display.Sprite;
 
 /**
- * Test the haxe-multiloader library in OpenFL
+ * Test the multiloader library in OpenFL
  */
-class Main extends Sprite
+class MainOpenFL extends Sprite
 {
   var test:LoadFile;
 

@@ -2,7 +2,7 @@
 <project>
 
 	<meta title="Load File" package="com.failsafegames.loadfile" version="1.0.0" company="FailSafe Games" />
-	<app main="OpenFL" path="Export" file="LoadFile" />
+	<app main="MainOpenFL" path="Export" file="LoadFile" />
 
 	<source path="Source" />
 
