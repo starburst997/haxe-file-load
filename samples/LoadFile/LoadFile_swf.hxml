@@ -1,6 +1,6 @@
 -lib multiloader
 -cp Source
--swf LoadFile.swf
+-swf Server/LoadFile.swf
 -swf-header 800:600:60:FFFFFF
 -swf-version 15.0
--main Source/Main
+-main Main

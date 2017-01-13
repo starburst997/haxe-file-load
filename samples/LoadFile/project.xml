@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 
-	<meta title="OpenFL" package="com.sample.openfl" version="1.0.0" company="Company Name" />
-	<app main="OpenFL" path="Export" file="OpenFL" />
+	<meta title="Load File" package="com.failsafegames.loadfile" version="1.0.0" company="FailSafe Games" />
+	<app main="OpenFL" path="Export" file="LoadFile" />
 
 	<source path="Source" />
 
 	<haxelib name="openfl" />
-	<haxelib name="haxe-multiloader" />
+	<haxelib name="multiloader" />
 
 	<assets path="Assets" rename="assets" />
 
