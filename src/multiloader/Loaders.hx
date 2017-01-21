@@ -15,6 +15,7 @@ import haxe.Json;
   import openfl.net.URLLoaderDataFormat;
   import openfl.net.URLRequest;
   import openfl.utils.ByteArray;
+  import lime.utils.Assets;
 #elseif flash
   import flash.events.Event;
   import flash.events.ProgressEvent;
@@ -32,6 +33,8 @@ import haxe.Json;
   import js.html.ProgressEvent;
   import js.html.XMLHttpRequest;
 #end
+
+using StringTools;
 
 // Use those public types
 typedef BytesLoader = Loader<Bytes>;
@@ -217,7 +220,7 @@ private class Loader<T>
   // Init
   public function init(url:String, callbacks:Callbacks<T>)
   {
-    trace("BytesLoader:", url);
+    trace("MultiLoader:", url);
 
     this.progress = 0.0;
 
@@ -239,6 +242,76 @@ private class Loader<T>
   private var loader:URLLoader;
   private function _load()
   {
+    #if openfl
+    if ( !url.startsWith("http") ) // Local Path
+    {
+      url = url.replace("./", "");
+      
+      // Lime progress
+      var progress = function(progress, total)
+      {
+        var percent:Float = (total == 0) ? 0 : (progress / total);
+        this.progress = percent;
+
+        if (this.progressHandler != null) this.progressHandler(percent);
+      };
+      
+      // Lime error
+      var error = function(msg)
+      {
+        // TODO: Better error handling...
+        if (this.errorHandler != null) this.errorHandler("Lime Error: " + msg);
+
+        _clean();
+      };
+      
+      // Use Lime Assets loading
+      if ( isText )
+      {
+        Assets.loadText(url).onComplete(function(text)
+        {
+          var value:T;
+          
+          if ( isJson )
+          {
+            try
+            {
+              value = cast(Json.parse(text));
+            }
+            catch (e:Dynamic)
+            {
+              if (this.errorHandler != null) this.errorHandler("Error: " + e.toString());
+              _clean();
+              return;
+            }
+          }
+          else
+          {
+            value = cast(text);
+          }
+          
+          this.progress = 1.0;
+          if (this.completeHandler != null) this.completeHandler(value);
+          
+          _clean();
+        }).onError(error).onProgress(progress);
+      }
+      else
+      {
+        Assets.loadBytes(url).onComplete(function(bytes)
+        {
+          this.progress = 1.0;
+          if (this.completeHandler != null) this.completeHandler(cast(bytes)); //Bytes.ofData(bytes)
+          
+          _clean();
+        }).onError(error).onProgress(progress);
+      }
+      return;
+    }
+    #end
+    
+    // TODO: For some reason, on android, this wouldn't works...
+    
     // OpenFL / Flash are the same, just different imports
     loader = new URLLoader();
     loader.dataFormat = isText ? URLLoaderDataFormat.TEXT : URLLoaderDataFormat.BINARY;
