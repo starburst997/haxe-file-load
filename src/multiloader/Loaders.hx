@@ -136,7 +136,8 @@ private class Loaders<T>
               }
             }
           }
-        }, progress: function(_percent)
+        },
+        progress: function(_percent)
         {
           // Handle progress events
           if ( progress != null ) progress(_percent);
@@ -148,7 +149,8 @@ private class Loaders<T>
 
             callback.progress(percent);
           }
-        }, error: function(_error)
+        },
+        error: function(_error)
         {
           // When there is an error, stop futher loading...
           if ( !done )
