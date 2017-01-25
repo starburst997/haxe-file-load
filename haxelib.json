@@ -1,12 +1,12 @@
 {
-	"name" : "multiloader",
-	"url" : "https://github.com/starburst997/haxe-multiloader",
-	"license" : "MIT",
+  "name" : "multiloader",
+  "url" : "https://github.com/starburst997/haxe-multiloader",
+  "license" : "MIT",
   "tags": ["bytes", "resource", "loader", "openfl"],
   "description" : "Simple Resource Loader (Bytes / String / Json) in Haxe with minimal dependency supporting JS / Flash / OpenFL.",
   "version" : "1.0.0",
   "classPath": "src/",
-	"releasenote" : "",
-	"contributors" : ["starburst997"],
-	"dependencies" : {}
+  "releasenote" : "",
+  "contributors" : ["starburst997"],
+  "dependencies" : {}
 }
