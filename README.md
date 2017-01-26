@@ -11,6 +11,8 @@ JS stuff is mainly ripped from [lime](https://github.com/openfl/lime/).
 
 This was primarily created as a way to distribute a small standalone JS file but also to be used as a haxe library in OpenFL project.
 
+Adding Promises, etc. would probably be a good idea, but I wanted something straigth-forward with no dependency.
+
 Example
 ```haxe
 // Single Bytes Loader
