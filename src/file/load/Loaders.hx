@@ -1,4 +1,4 @@
-package multiloader;
+package file.load;
 
 import haxe.io.Bytes;
 import haxe.Json;
@@ -246,7 +246,7 @@ private class Loader<T>
     if ( !url.startsWith("http") ) // Local Path
     {
       url = url.replace("./", "");
-      
+
       // Lime progress
       var progress = function(progress, total)
       {
@@ -255,7 +255,7 @@ private class Loader<T>
 
         if (this.progressHandler != null) this.progressHandler(percent);
       };
-      
+
       // Lime error
       var error = function(msg)
       {
@@ -264,14 +264,14 @@ private class Loader<T>
 
         _clean();
       };
-      
+
       // Use Lime Assets loading
       if ( isText )
       {
         Assets.loadText(url).onComplete(function(text)
         {
           var value:T;
-          
+
           if ( isJson )
           {
             try
@@ -289,10 +289,10 @@ private class Loader<T>
           {
             value = cast(text);
           }
-          
+
           this.progress = 1.0;
           if (this.completeHandler != null) this.completeHandler(value);
-          
+
           _clean();
         }).onError(error).onProgress(progress);
       }
@@ -302,16 +302,16 @@ private class Loader<T>
         {
           this.progress = 1.0;
           if (this.completeHandler != null) this.completeHandler(cast(bytes)); //Bytes.ofData(bytes)
-          
+
           _clean();
         }).onError(error).onProgress(progress);
       }
       return;
     }
     #end
-    
+
     // TODO: For some reason, on android, this wouldn't works...
-    
+
     // OpenFL / Flash are the same, just different imports
     loader = new URLLoader();
     loader.dataFormat = isText ? URLLoaderDataFormat.TEXT : URLLoaderDataFormat.BINARY;

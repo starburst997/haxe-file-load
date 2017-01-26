@@ -1,7 +1,10 @@
 package;
 
-import multiloader.Loaders;
-import multiloader.MultiLoader;
+import file.load.Loaders;
+import file.load.FileLoad;
+
+import statistics.TraceTimer;
+import statistics.Stats;
 
 // Tests
 enum Tests
@@ -22,9 +25,9 @@ enum Tests
 }
 
 /**
- * Class used to Test / Compile haxe-bytes-loader library
+ * Class used to Test / Compile haxe-file-load library
  */
-class LoadFile
+class TestLoad
 {
   // List of files
   public static inline var PATH:String = "./assets/notes/";
@@ -32,6 +35,9 @@ class LoadFile
   public static inline var TEST2:String = PATH + "test1.notezz";
   public static inline var TEST3:String = PATH + "test2.json";
   public static inline var TEST4:String = PATH + "test2.jsonzz";
+
+  // Stats
+  var stats = new Stats();
 
   // Keep current loader
   var bytesLoader:BytesLoader = null;
@@ -46,7 +52,9 @@ class LoadFile
   // Run some tests
   public function new()
   {
-    trace("Load File Launch!");
+    trace("Test Load Launch!");
+
+    TraceTimer.activate();
 
     var test = MultiBytes_1;
 
@@ -102,7 +110,7 @@ class LoadFile
     }
 
     // Load all files
-    MultiLoader.multiBytes(files,
+    FileLoad.multiBytes(files,
     {
       complete: function(hasError)
       {

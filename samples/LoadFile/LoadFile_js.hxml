@@ -1,5 +1,0 @@
--lib multiloader
--cp Source
--js Server/js/LoadFile.js
--main Main
-

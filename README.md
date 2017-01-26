@@ -1,4 +1,4 @@
-# haxe-multiloader
+# haxe-file-load
 Simple Resource Loader in Haxe with minimal dependency supporting JS / SWF / OpenFL.
 
 *Require Haxe 3.4+*
@@ -49,7 +49,7 @@ for ( url in urls )
 }
 
 // Load all files
-MultiLoader.multiBytes(files,
+FileLoad.multiBytes(files,
 {
   complete: function(hasError)
   {

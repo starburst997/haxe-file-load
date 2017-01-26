@@ -1,11 +1,11 @@
-package multiloader;
+package file.load;
 
-import multiloader.Loaders;
+import file.load.Loaders;
 
 /**
  * Load resources helper function
  */
-class MultiLoader
+class FileLoad
 {
   // Keep reference to the different loaders available
   private static var bytesLoader = new BytesLoaders();
@@ -14,6 +14,24 @@ class MultiLoader
 
   // No need to instantiate
   private function new() {}
+
+  // Open a Bytes file by user using File Dialog
+  public static function openBytes()
+  {
+    // TODO
+  }
+
+  // Open a String file by user using File Dialog
+  public static function openString()
+  {
+    // TODO
+  }
+
+  // Open a Json file by user using File Dialog
+  public static function openJson()
+  {
+    // TODO
+  }
 
   // Load a single Bytes
   public static inline function loadBytes(params:BytesLoaderParams)

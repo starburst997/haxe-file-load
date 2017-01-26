@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+	<meta title="Test Load" package="com.failsafegames.testload" version="1.0.0" company="FailSafe Games" />
+	<app main="MainOpenFL" path="Export" file="TestLoad" />
+
+	<source path="Source" />
+
+	<haxelib name="openfl" />
+  <haxelib name="statistics" />
+  <haxelib name="trace-timer" />
+	<haxelib name="file-load" />
+
+	<assets path="Assets" rename="assets" />
+
+  <!--<haxeflag name="--times" value="" />-->
+
+</project>

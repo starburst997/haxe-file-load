@@ -3,17 +3,17 @@ package;
 import openfl.display.Sprite;
 
 /**
- * Test the multiloader library in OpenFL
+ * Test the file-load library in OpenFL
  */
 class MainOpenFL extends Sprite
 {
-  var test:LoadFile;
+  var test:TestLoad;
 
   // Run some tests
 	public function new()
   {
 		super ();
 
-		test = new LoadFile();
+		test = new TestLoad();
 	}
 }
