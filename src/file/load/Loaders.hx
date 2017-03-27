@@ -243,6 +243,8 @@ private class Loader<T>
   private function _load()
   {
     #if openfl
+    //CURLEasy.setopt(curl, CURLOption.SSL_VERIFYPEER, false);
+    
     if ( !url.startsWith("http") ) // Local Path
     {
       url = url.replace("./", "");
@@ -328,6 +330,8 @@ private class Loader<T>
     loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, _errorHandler, false, 0, true);
     loader.addEventListener(IOErrorEvent.IO_ERROR, _errorHandler, false, 0, true);
 
+    trace("OK?");
+    
     // Load
     try
     {
@@ -344,12 +348,29 @@ private class Loader<T>
   {
     trace("Status", e.status, this.url);
   }
-  private function _errorHandler(e:Event)
+  private function _errorHandler(e:ErrorEvent)
   {
     if ( loader != null )
     {
+      if ( Std.is(e, ErrorEvent) )
+      {
+        trace("Error", e.text);
+      }
+      else if ( Std.is(e, AsyncErrorEvent) )
+      {
+        trace("AsyncError", cast(e, AsyncErrorEvent));
+      }
+      else if ( Std.is(e, SecurityErrorEvent) )
+      {
+        trace("SecurityError", cast(e, SecurityErrorEvent));
+      }
+      else if ( Std.is(e, IOErrorEvent) )
+      {
+        trace("IOError", cast(e, IOErrorEvent));
+      }
+      
       // TODO: Better error handling...
-      if (this.errorHandler != null) this.errorHandler("Error!");
+      if (this.errorHandler != null) this.errorHandler(e.text);
     }
 
     _clean();
