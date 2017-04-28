@@ -318,7 +318,7 @@ private class Loader<T>
 
     // Ok SSL support seems to have some problem with my server with Lime...
     // So trying this library
-    //AsyncHttp.logEnabled = true;
+    AsyncHttp.logEnabled = true;
     AsyncHttp.CONTENT_KIND_MATCHES = []; // Force Binary only
     var request = new HttpRequest(
     {
