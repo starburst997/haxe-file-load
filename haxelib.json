@@ -8,5 +8,7 @@
   "classPath": "src/",
   "releasenote" : "",
   "contributors" : ["starburst997"],
-  "dependencies" : {}
+  "dependencies" : {
+    "akifox-asynchttp": ""
+  }
 }

@@ -16,6 +16,7 @@ import haxe.Json;
   import openfl.net.URLRequest;
   import openfl.utils.ByteArray;
   import lime.utils.Assets;
+  import com.akifox.asynchttp.*;
 #elseif flash
   import flash.events.Event;
   import flash.events.ProgressEvent;
@@ -186,6 +187,9 @@ private class Loaders<T>
  * Generic loader
  */
 @:generic
+#if openfl
+@:access(com.akifox.asynchttp.AsyncHttp)
+#end
 private class Loader<T>
 {
   // Progress
@@ -312,6 +316,52 @@ private class Loader<T>
     }
     #end
 
+    // Ok SSL support seems to have some problem with my server with Lime...
+    // So trying this library
+    //AsyncHttp.logEnabled = true;
+    AsyncHttp.CONTENT_KIND_MATCHES = []; // Force Binary only
+    var request = new HttpRequest(
+    {
+        url : this.url,
+        callbackProgress : function( loaded:Int, total:Int )
+        {
+          var percent:Float = (total == 0) ? 0 : (loaded / total);
+          if ( percent <= -0 ) percent = 0;
+          if ( percent > 0.99 ) percent = 0.99;
+          trace('Progress: ${Std.int(percent*100)}%');
+          this.progress = percent;
+          if (this.progressHandler != null) this.progressHandler(percent);
+        },
+				callback : function(response:HttpResponse) 
+        {
+          if ( response.isOK ) 
+          {
+            trace('DONE: ${url} [${response.content.length}] (HTTP STATUS ${response.status})');
+            
+            if ( isJson || isText )
+            {
+              _completeHandler2(response.content.toString());
+            }
+            else
+            {
+              _completeHandler2(response.content);
+            }
+            
+          } 
+          else 
+          {
+            trace('ERROR (HTTP STATUS ${response.status})');
+            if (this.errorHandler != null) this.errorHandler(response.error);
+          }
+          _clean();
+        }
+			});
+		request.send();
+    
+    return;
+    
+    // Until Lime Https works, this code is ignored...
+    
     // TODO: For some reason, on android, this wouldn't works...
 
     // OpenFL / Flash are the same, just different imports
@@ -343,6 +393,37 @@ private class Loader<T>
       _clean();
       return;
     }
+  }
+  private function _completeHandler2(data:Dynamic)
+  {
+    var value:T;
+    
+    if ( isJson )
+    {
+      try
+      {
+        value = cast(Json.parse(data));
+      }
+      catch (e:Dynamic)
+      {
+        if (this.errorHandler != null) this.errorHandler("Error: " + e.toString());
+        _clean();
+        return;
+      }
+    }
+    else if ( isText )
+    {
+      value = cast(data);
+    }
+    else
+    {
+      value = cast(data);
+    }
+    
+    this.progress = 1.0;
+    if (this.completeHandler != null) this.completeHandler(value);
+    
+    _clean();
   }
   private function _statusHandler(e:HTTPStatusEvent)
   {
