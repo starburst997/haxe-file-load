@@ -316,7 +316,7 @@ private class Loader<T>
     }
     #end
 
-    #if windows // !js
+    #if !js
     // Huge issue with SSL support, ipv6, etc...
     url = url.replace('https://', 'http://');
     
