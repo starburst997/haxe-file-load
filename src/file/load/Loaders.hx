@@ -316,8 +316,16 @@ private class Loader<T>
     }
     #end
 
+    #if !js
+    // Huge issue with SSL support, ipv6, etc...
+    url = url.replace('https://', 'http://');
+    
     // Ok SSL support seems to have some problem with my server with Lime...
-    // So trying this library
+    // So trying this library (working! but not on IPV6!)
+    
+    // With AsyncHttp, IPV6 seems to work (but not SSL, so close!)
+    
+    //#if test-async-http
     AsyncHttp.logEnabled = true;
     AsyncHttp.CONTENT_KIND_MATCHES = []; // Force Binary only
     var request = new HttpRequest(
@@ -359,6 +367,8 @@ private class Loader<T>
 		request.send();
     
     return;
+    //#end
+    #end
     
     // Until Lime Https works, this code is ignored...
     
