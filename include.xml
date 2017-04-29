@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+  <haxelib name="haxe-custom" if="desktop" />
+  <haxelib name="haxe-custom" if="mobile" />
+
+</project>

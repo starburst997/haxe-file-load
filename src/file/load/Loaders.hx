@@ -316,7 +316,7 @@ private class Loader<T>
     }
     #end
 
-    #if !js
+    #if (!js && !ios)
     // Huge issue with SSL support, ipv6, etc...
     url = url.replace('https://', 'http://');
     
@@ -370,10 +370,10 @@ private class Loader<T>
     //#end
     #end
     
-    // Until Lime Https works, this code is ignored...
+    // Lime currently error "6" on IPV6 network (except on ios)
     
     // TODO: For some reason, on android, this wouldn't works...
-
+    
     // OpenFL / Flash are the same, just different imports
     loader = new URLLoader();
     loader.dataFormat = isText ? URLLoaderDataFormat.TEXT : URLLoaderDataFormat.BINARY;
@@ -389,8 +389,6 @@ private class Loader<T>
     loader.addEventListener(AsyncErrorEvent.ASYNC_ERROR, _errorHandler, false, 0, true);
     loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, _errorHandler, false, 0, true);
     loader.addEventListener(IOErrorEvent.IO_ERROR, _errorHandler, false, 0, true);
-
-    trace("OK?");
     
     // Load
     try
