@@ -506,6 +506,8 @@ private class Loader<T>
         var data:ByteArray = loader.data;
         #if (openfl >= "4.0.0")
         value = cast(Bytes.ofData(data));
+        #else
+        value = null;
         #end
       }
 
