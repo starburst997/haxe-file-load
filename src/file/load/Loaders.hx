@@ -504,7 +504,9 @@ private class Loader<T>
       else
       {
         var data:ByteArray = loader.data;
+        #if (openfl >= "4.0.0")
         value = cast(Bytes.ofData(data));
+        #end
       }
 
       this.progress = 1.0;
