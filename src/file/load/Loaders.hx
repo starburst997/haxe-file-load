@@ -15,7 +15,11 @@ import haxe.Json;
   import openfl.net.URLLoaderDataFormat;
   import openfl.net.URLRequest;
   import openfl.utils.ByteArray;
+  
+  #if (openfl >= "4.0.0")
   import lime.utils.Assets;
+  #end
+  
   import com.akifox.asynchttp.*;
 #elseif flash
   import flash.events.Event;
@@ -246,7 +250,7 @@ private class Loader<T>
   private var loader:URLLoader;
   private function _load()
   {
-    #if openfl
+    #if (openfl >= "4.0.0")
     //CURLEasy.setopt(curl, CURLOption.SSL_VERIFYPEER, false);
     
     if ( !url.startsWith("http") ) // Local Path
@@ -501,7 +505,11 @@ private class Loader<T>
       else
       {
         var data:ByteArray = loader.data;
+        #if (openfl >= "4.0.0")
         value = cast(Bytes.ofData(data));
+        #else
+        value = null;
+        #end
       }
 
       this.progress = 1.0;
