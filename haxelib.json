@@ -9,7 +9,7 @@
   "releasenote" : "",
   "contributors" : ["starburst997"],
   "dependencies" : {
-    "akifox-asynchttp": "",
-    "haxe-custom": ""
+    "akifox-asynchttp": "0.4.7",
+    "haxe-custom": "gh:starburst997/haxe-custom#7c0e1dd1f16e037a72066a014722c554bf85956e"
   }
 }
